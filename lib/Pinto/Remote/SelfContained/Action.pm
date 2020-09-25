@@ -158,3 +158,18 @@ Pinto::Remote::SelfContained::Action - base class for remote Actions
 
 Runs this Action on the remote server by serializing itself and
 sending a POST request to the server.
+
+=head1 AUTHOR
+
+Aaron Crane, E<lt>arc@cpan.orgE<gt>
+
+=head1 COPYRIGHT
+
+Copyright 2020 Aaron Crane.
+
+=head1 LICENSE
+
+This library is free software and may be distributed under the same terms
+as perl itself. See L<http://dev.perl.org/licenses/>.
+
+=cut

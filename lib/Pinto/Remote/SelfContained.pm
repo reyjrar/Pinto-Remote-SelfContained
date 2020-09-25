@@ -101,3 +101,18 @@ Loads the Action subclass for the given C<$action_name> and constructs
 an object using the given C<$action_args>.  If the subclass
 C<Pinto::Remote::SelfContained::Action::$action_name> does not exist, then it falls
 back to the L<Pinto::Remote::SelfContained::Action> base class.
+
+=head1 AUTHOR
+
+Aaron Crane, E<lt>arc@cpan.orgE<gt>
+
+=head1 COPYRIGHT
+
+Copyright 2020 Aaron Crane.
+
+=head1 LICENSE
+
+This library is free software and may be distributed under the same terms
+as perl itself. See L<http://dev.perl.org/licenses/>.
+
+=cut

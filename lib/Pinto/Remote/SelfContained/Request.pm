@@ -137,3 +137,23 @@ sub dump {
 }
 
 1;
+__END__
+
+=head1 NAME
+
+Pinto::Remote::SelfContained::Request - request class for HTTP::Tiny
+
+=head1 AUTHOR
+
+Aaron Crane, E<lt>arc@cpan.orgE<gt>
+
+=head1 COPYRIGHT
+
+Copyright 2020 Aaron Crane.
+
+=head1 LICENSE
+
+This library is free software and may be distributed under the same terms
+as perl itself. See L<http://dev.perl.org/licenses/>.
+
+=cut
