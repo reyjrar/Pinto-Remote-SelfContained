@@ -4,15 +4,15 @@ package
 use v5.10;
 use Moo::Role;
 
-use HTTP::Tiny;
+use Pinto::Remote::SelfContained::Httptiny;
 use Types::Standard qw(InstanceOf);
 
 use namespace::clean;
 
 has httptiny => (
     is => 'lazy',
-    isa => InstanceOf['HTTP::Tiny'],
-    default => sub { HTTP::Tiny->new(verify_SSL => 1) },
+    isa => InstanceOf['Pinto::Remote::SelfContained::Httptiny'],
+    default => sub { Pinto::Remote::SelfContained::Httptiny->new(verify_SSL => 1) },
 );
 
 1;
