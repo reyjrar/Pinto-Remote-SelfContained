@@ -1,4 +1,5 @@
 requires 'Carp';
+requires 'Getopt::Long::Descriptive';
 requires 'HTTP::Tiny';
 requires 'JSON::MaybeXS';
 requires 'List::Util', '>= 1.29';
