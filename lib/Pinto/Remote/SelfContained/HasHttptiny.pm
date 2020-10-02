@@ -9,6 +9,8 @@ use Types::Standard qw(InstanceOf);
 
 use namespace::clean;
 
+our $VERSION = '0.900';
+
 has httptiny => (
     is => 'lazy',
     isa => InstanceOf['Pinto::Remote::SelfContained::Httptiny'],

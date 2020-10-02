@@ -13,6 +13,8 @@ use constant PINTO_MINIMUM_CPANM_VERSION => '1.6920';
 
 use namespace::clean;
 
+our $VERSION = '0.900';
+
 extends qw(Pinto::Remote::SelfContained::Action);
 
 has cpanm_options => (
