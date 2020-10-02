@@ -8,6 +8,7 @@ use Module::Runtime qw(module_notional_filename use_package_optimistically);
 use Pinto::Remote::SelfContained::Action;
 use Pinto::Remote::SelfContained::Chrome;
 use Pinto::Remote::SelfContained::Types qw(Uri);
+use Pinto::Remote::SelfContained::Util qw(current_username);
 use Types::Standard qw(Bool InstanceOf Int Maybe Str);
 
 use namespace::clean;
@@ -28,10 +29,7 @@ has root => (
 has username => (
     is => 'ro',
     isa => Str,
-    default => sub {
-        return $ENV{PINTO_USERNAME} // $ENV{USER} // $ENV{LOGIN} // $ENV{USERNAME} // $ENV{LOGNAME}
-            // croak("Can't determine username; try setting \$PINTO_USERNAME");
-    },
+    default => sub { current_username() },
 );
 
 has password => (is => 'ro', isa => Maybe[Str]);

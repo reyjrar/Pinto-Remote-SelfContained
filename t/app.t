@@ -93,16 +93,6 @@ subtest 'help subcommand', sub {
 subtest 'missing global options', sub {
     my $commands = Pinto::Remote::SelfContained::App->command_info;
     parse_ok(
-        [qw(nop)],
-        ['', '', {}, re(qr/^Required options not found: --root, --username\n\n.* nop \[.* - \Q$commands->{nop}{summary}\E/)],
-        'nop with all options missing',
-    );
-    parse_ok(
-        [qw(nop -r http://example.com)],
-        ['', '', {}, re(qr/^Required options not found: --username\n\n.* nop \[.* - \Q$commands->{nop}{summary}\E/)],
-        'nop with missing -u option',
-    );
-    parse_ok(
         [qw(nop -u fred)],
         ['', '', {}, re(qr/^Required options not found: --root\n\n.* nop \[.* - \Q$commands->{nop}{summary}\E/)],
         'nop with missing -r option',
@@ -121,6 +111,19 @@ subtest 'basic parsing', sub {
         ['', '', { action_name => 'nop', root => 'http://example.com', username => 'fred', args => { sleep => 10 } }, undef],
         'nop with global and local options',
     );
+    {
+        local $ENV{PINTO_USERNAME} = 'barney';
+        parse_ok(
+            [qw(-r http://example.com nop)],
+            ['', '', { action_name => 'nop', root => 'http://example.com', args => {} }, undef],
+            'nop with username taken from env',
+        );
+        my $remote_instance = do {
+            my $app = Pinto::Remote::SelfContained::App->new_from_argv([qw(nop -r http://example.com)]);
+            $app->make_remote_instance;
+        };
+        is($remote_instance->username, 'barney', 'username is correctly defaulted');
+    }
     parse_ok(
         [qw(-r http://example.com -u fred copy ffrroomm ttoo)],
         [

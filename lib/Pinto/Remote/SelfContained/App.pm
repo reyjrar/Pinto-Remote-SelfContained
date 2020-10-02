@@ -5,11 +5,12 @@ use v5.10;
 use Moo;
 
 use Getopt::Long::Descriptive qw(describe_options);
-use List::Util qw(max);
+use List::Util qw(max pairgrep);
 use Path::Tiny qw(path);
 use Pinto::Remote::SelfContained;
 use Pinto::Remote::SelfContained::Chrome;
 use Pinto::Remote::SelfContained::Types qw(Uri);
+use Pinto::Remote::SelfContained::Util qw(current_username);
 use Types::Standard qw(ArrayRef Bool HashRef Int Maybe Str);
 
 use namespace::clean;
@@ -18,7 +19,7 @@ our $VERSION = '0.900';
 
 has root => (is => 'ro', isa => Uri, coerce => 1, required => 1);
 
-has username => (is => 'ro', isa => Str, required => 1);
+has username => (is => 'ro', isa => Str, default => sub { current_username() });
 has password => (is => 'ro', isa => Maybe[Str]);
 
 has quiet => (is => 'ro', isa => Bool);
@@ -477,7 +478,7 @@ sub parse_from_argv {
         my $exit_status = $class->run_help_command($usage, @ARGV);
         exit $exit_status;
     }
-    elsif (my @missing = grep !defined $opt->{$_}, qw(root username)) {
+    elsif (my @missing = grep !defined $opt->{$_}, qw(root)) {
         my $missing = join ', ', map "--$_", @missing;
         $usage->die({ pre_text => "Required options not found: $missing\n\n" });
     }
@@ -587,6 +588,7 @@ sub run {
 sub make_remote_instance {
     my ($self) = @_;
     return Pinto::Remote::SelfContained->new(
+        pairgrep { defined $b }
         root => $self->root,
         username => $self->username,
         password => $self->password,
