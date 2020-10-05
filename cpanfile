@@ -1,3 +1,5 @@
+requires 'perl', '>= 5.010';
+
 requires 'Carp';
 requires 'Getopt::Long::Descriptive';
 requires 'HTTP::Tiny';
