@@ -43,6 +43,14 @@ has chrome => (
 sub run {
     my ($self, $action_name, @args) = @_;
 
+    my $action = $self->make_action($action_name, @args);
+
+    $action->execute;
+}
+
+sub make_action {
+    my ($self, $action_name, @args) = @_;
+
     my $action_args = (@args == 1 && ref $args[0] eq 'HASH') ? $args[0] : { @args };
 
     my $action_class = $self->load_class_for_action(name => $action_name);
@@ -58,8 +66,14 @@ sub run {
         chrome => $self->chrome,
         httptiny => $self->httptiny,
     );
+}
 
-    $action->execute;
+sub run_streaming {
+    my ($self, $streaming_callback, $action_name, @args) = @_;
+
+    my $action = $self->make_action($action_name, @args);
+
+    $action->execute($streaming_callback);;
 }
 
 sub load_class_for_action {

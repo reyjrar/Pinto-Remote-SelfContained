@@ -86,11 +86,11 @@ around BUILDARGS => sub {
 };
 
 around execute => sub {
-    my (undef, $self) = @_;
+    my (undef, $self, $streaming_callback) = @_;
 
     if ($self->do_pull) {
         my $request = $self->_make_request('pull');
-        my $response = $self->_send_request($request);
+        my $response = $self->_send_request($request, $streaming_callback);
         croak('Failed to pull packages') if !$response->{success};
     }
 

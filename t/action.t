@@ -54,5 +54,36 @@ subtest 'response parts' => sub {
     );
 };
 
+subtest 'streaming' => sub {
+    my @body = (
+        'DATA-GOES-HERE',
+        '## DIAG-MSG-HERE',
+        'ANOTHER-DATA-LINE',
+        '## Status: ok',
+    );
+    my $body = join '', map "$_\n", @body;
+    my $chrome = T::Chrome->new;
+    my $httptiny = T::HTTPTiny->new([join('', (
+        "HTTP/1.1 200 OK\r\n",
+        "Content-type: application/vnd.pinto.v1+text\r\n",
+        "\r\n",
+        $body,
+    ))]);
+
+    my $action = Pinto::Remote::SelfContained::Action->new(
+        username => 'fred',
+        password => undef,
+        root => 'http://example.com',
+        chrome => $chrome,
+        httptiny => $httptiny,
+        name => 'list',
+    );
+
+    my @lines;
+    my $streaming_callback = sub { push @lines, [@_] };
+    my $response = $action->_send_request(undef, $streaming_callback);
+    is_deeply(\@lines, [ map [$_], @body[0, 2] ], 'streamed response');
+};
+
 had_no_warnings();
 done_testing();

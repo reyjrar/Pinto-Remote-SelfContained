@@ -32,10 +32,10 @@ has password => (is => 'ro', isa => Maybe[Str], required => 1);
 has error => (is => 'rw');
 
 sub execute {
-    my ($self) = @_;
+    my ($self, $streaming_callback) = @_;
 
     my $request = $self->_make_request;
-    my $response = $self->_send_request($request);
+    my $response = $self->_send_request($request, $streaming_callback);
 
     return $self->_make_result($response);
 }
@@ -143,8 +143,9 @@ sub _response_callback {
             $self->chrome->diag("$1");
         }
         else {
-            # Other: emit as text
+            # Other: emit as text, and send to any streaming callback
             $self->chrome->show($line);
+            $streaming_callback->($line) if $streaming_callback;
         }
     }
 }
