@@ -8,7 +8,6 @@ use namespace::clean;
 
 extends 'Pinto::Remote::SelfContained::Chrome';
 
-has '+quiet' => (default => 0);
 has '+verbose' => (default => 1);
 
 has stdout_buf => (is => 'lazy', builder => sub { \ (my $buf = '') });

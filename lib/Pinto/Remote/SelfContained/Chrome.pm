@@ -12,8 +12,8 @@ use namespace::clean;
 
 our $VERSION = '0.900';
 
-has verbose => (is => 'ro', isa => Int, required => 1);
-has quiet => (is => 'ro', isa => Bool, required => 1);
+has verbose => (is => 'ro', isa => Int, default => 0);
+has quiet => (is => 'ro', isa => Bool, default => 0);
 
 # Not currently overridable:
 sub color { 0 }
