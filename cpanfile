@@ -7,7 +7,7 @@ requires 'JSON::MaybeXS';
 requires 'List::Util', '>= 1.29';
 requires 'MIME::Base64';
 requires 'Module::Runtime';
-requires 'Moo';
+requires 'Moo', '>= 1.006000';
 requires 'MooX::HandlesVia';
 requires 'Path::Tiny', '>= 0.058';
 requires 'Time::Moment';
