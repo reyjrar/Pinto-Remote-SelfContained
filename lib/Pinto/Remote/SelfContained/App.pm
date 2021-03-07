@@ -151,7 +151,7 @@ sub command_info {
             opt_spec => [
                 [ 'cascade'                 => 'Always pick latest upstream package' ],
                 [ 'cpanm-exe|cpanm=s'       => 'Path to the cpanm executable' ],
-                [ 'cpanm-options|o:s%'      => 'name=value pairs of cpanm options' ],
+                [ 'cpanm-options|o=s%'      => 'name=value pairs of cpanm options' ],
                 [ 'diff-style=s'            => 'Set style of diff reports' ],
                 [ 'local-lib|l=s'           => 'install into a local lib directory' ],
                 [ 'local-lib-contained|L=s' => 'install into a contained local lib directory' ],
