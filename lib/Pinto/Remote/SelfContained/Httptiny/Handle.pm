@@ -9,7 +9,7 @@ use Class::Method::Modifiers qw(around);
 
 use namespace::clean;
 
-our $VERSION = '0.903';
+our $VERSION = '0.904';
 
 use HTTP::Tiny ();
 use parent -norequire, 'HTTP::Tiny::Handle';

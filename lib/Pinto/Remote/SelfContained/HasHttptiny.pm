@@ -9,7 +9,7 @@ use Types::Standard qw(InstanceOf);
 
 use namespace::clean;
 
-our $VERSION = '0.903';
+our $VERSION = '0.904';
 
 has httptiny => (
     is => 'lazy',

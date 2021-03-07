@@ -15,7 +15,7 @@ use Types::Standard qw(ArrayRef Bool HashRef Int Maybe Str);
 
 use namespace::clean;
 
-our $VERSION = '0.903';
+our $VERSION = '0.904';
 
 has root => (is => 'ro', isa => Uri, coerce => 1, required => 1);
 

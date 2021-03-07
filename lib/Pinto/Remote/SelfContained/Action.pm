@@ -14,7 +14,7 @@ use URI;
 
 use namespace::clean;
 
-our $VERSION = '0.903';
+our $VERSION = '0.904';
 
 with qw(
     Pinto::Remote::SelfContained::HasHttptiny
