@@ -34,6 +34,9 @@ has cpanm_exe => (
         my $output = `cpanm --version`
             // croak("Could not learn version of cpanm");
 
+        croak("Could not learn version of cpanm")
+            if $output eq '';
+
         my ($cpanm_version) = $output =~ m{version ([0-9.]+)}
             or croak("Could not parse cpanm version number from $output");
 
