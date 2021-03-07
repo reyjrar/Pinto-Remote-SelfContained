@@ -21,6 +21,6 @@ on 'test' => sub {
     requires 'Capture::Tiny';
     requires 'Test::Deep';
     requires 'Test::Fatal';
-    requires 'Test::More';
+    requires 'Test::More', '>= 0.96';
     requires 'Test::Warnings';
 };
