@@ -9,7 +9,7 @@ requires 'MIME::Base64';
 requires 'Module::Runtime';
 requires 'Moo';
 requires 'MooX::HandlesVia';
-requires 'Path::Tiny';
+requires 'Path::Tiny', '>= 0.058';
 requires 'Time::Moment';
 requires 'Type::Library';
 requires 'Type::Utils';
