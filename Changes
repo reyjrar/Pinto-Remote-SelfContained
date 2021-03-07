@@ -1,5 +1,9 @@
 Revision history for Pinto::Remote::SelfContained
 
+0.901-TRIAL   2021-03-07
+    - Attempt to fix option parsing error; this may not work
+    - Attempt to fix Win32 cpanm version detection test
+
 0.900   2021-03-06
     - Trial release
     - Initial release
