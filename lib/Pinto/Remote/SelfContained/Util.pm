@@ -10,7 +10,7 @@ use Time::Moment;
 
 use Exporter qw(import);
 
-our $VERSION = '0.902';
+our $VERSION = '0.903';
 
 our @EXPORT_OK = qw(
     current_time_offset

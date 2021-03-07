@@ -1,5 +1,8 @@
 Revision history for Pinto::Remote::SelfContained
 
+0.903-TRIAL   2021-03-07
+    - Second attempt to fix option parsing error; this may still not work
+
 0.902-TRIAL   2021-03-07
     - Bump Path::Tiny dependency
 
