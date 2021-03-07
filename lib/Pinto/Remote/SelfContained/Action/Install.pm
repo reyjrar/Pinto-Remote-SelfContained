@@ -102,7 +102,7 @@ around execute => sub {
 
     # Process other cpanm options
     my $cpanm_options = $self->cpanm_options;
-    for my $opt (keys %$cpanm_options) {
+    for my $opt (sort keys %$cpanm_options) {
         my $dash = length $opt == 1 ? '-' : '--';
         push @opts, "$dash$opt", grep defined && length, $cpanm_options->{$opt}
     }
