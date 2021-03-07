@@ -9,7 +9,7 @@ use Pinto::Remote::SelfContained::Types qw(SingleBodyPart);
 
 use namespace::clean;
 
-our $VERSION = '0.901';
+our $VERSION = '0.902';
 
 extends qw(Pinto::Remote::SelfContained::Action);
 

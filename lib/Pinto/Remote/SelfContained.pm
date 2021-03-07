@@ -13,7 +13,7 @@ use Types::Standard qw(Bool InstanceOf Int Maybe Str);
 
 use namespace::clean;
 
-our $VERSION = '0.901';
+our $VERSION = '0.902';
 
 with qw(
     Pinto::Remote::SelfContained::HasHttptiny

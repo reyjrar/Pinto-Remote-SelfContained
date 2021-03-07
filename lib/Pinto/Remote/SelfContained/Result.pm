@@ -8,7 +8,7 @@ use Types::Standard qw(Bool);
 
 use namespace::clean;
 
-our $VERSION = '0.901';
+our $VERSION = '0.902';
 
 use overload q[""] => 'to_string';
 

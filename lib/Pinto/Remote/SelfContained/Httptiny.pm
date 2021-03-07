@@ -10,7 +10,7 @@ use Pinto::Remote::SelfContained::Httptiny::Handle;
 
 use namespace::clean;
 
-our $VERSION = '0.901';
+our $VERSION = '0.902';
 
 use parent 'HTTP::Tiny';
 
