@@ -12,7 +12,7 @@ use T::Handle;
 
 use namespace::clean;
 
-our $VERSION = '0.904';
+our $VERSION = '0.905';
 
 sub new {
     my $class = shift;

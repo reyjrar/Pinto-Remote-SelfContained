@@ -1,5 +1,8 @@
 Revision history for Pinto::Remote::SelfContained
 
+0.905-TRIAL   2021-03-07
+    - Specify minimum HTTP::Tiny version for can_ssl
+
 0.904-TRIAL   2021-03-07
     - Specify minimum Moo version for `coerce => 1`
 
