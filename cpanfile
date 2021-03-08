@@ -2,7 +2,7 @@ requires 'perl', '>= 5.010';
 
 requires 'Carp';
 requires 'Getopt::Long::Descriptive';
-requires 'HTTP::Tiny';
+requires 'HTTP::Tiny', '>= 0.056';
 requires 'JSON::MaybeXS';
 requires 'List::Util', '>= 1.29';
 requires 'MIME::Base64';
