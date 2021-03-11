@@ -1,5 +1,8 @@
 Revision history for Pinto::Remote::SelfContained
 
+1.000   2021-03-11
+    - No further changes from 0.905
+
 0.905-TRIAL   2021-03-07
     - Specify minimum HTTP::Tiny version for can_ssl
 
