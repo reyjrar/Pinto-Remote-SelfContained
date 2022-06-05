@@ -132,7 +132,7 @@ subtest 'basic parsing', sub {
                 action_name => 'copy',
                 root => 'http://example.com',
                 username => 'fred',
-                args => { 
+                args => {
                     stack => 'ffrroomm',
                     to_stack => 'ttoo',
                  },
@@ -149,7 +149,7 @@ subtest 'basic parsing', sub {
                 action_name => 'copy',
                 root => 'http://example.com',
                 username => 'fred',
-                args => { 
+                args => {
                     stack => 'ffrroomm',
                     to_stack => 'ttoo',
                  },

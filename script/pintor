@@ -1,4 +1,6 @@
 #! perl
+# PODNAME: pintor
+# ABSTRACT: script for interacting with a remote Pinto server
 
 use v5.10;
 use strict;
@@ -12,14 +14,48 @@ Pinto::Remote::SelfContained::App->new_from_argv(\@ARGV)->run;
 
 __END__
 
-=head1 NAME
-
-pintor - script for interacting with a remote Pinto server
-
 =head1 SYNOPSIS
 
     pintor help
     pintor list --root http://example.com --stack dev
+
+=head1 ENVIRONMENT VARIABLES
+
+This command recognizes and can use a number of environment variables as
+defaults for some of the command line arguments.
+
+=over 4
+
+=item C<PINTO_HOME>
+
+This sets the default search path for command execution.
+
+=item C<PINTO_REPOSITORY_ROOT>
+
+This sets the default for C<--root> and is expected to be a URL.
+
+=item C<PINTO_AUTHOR_ID>
+
+This sets the default for C<--author> and is expected to be a string.
+
+=item C<PINTO_AUTHENTICATE>
+
+This sets the default for C<--authenticate> and is expected to be a boolean.
+
+=item C<PINTO_USERNAME>
+
+This sets the default for C<--username> and is expected to be a string.
+
+=item C<PINTO_PASSWORD>
+
+If set, this is used as the password in C<--authenticate> is specified.
+
+=item C<PINTO_PASSEXEC>
+
+If set, implies authentication is enabled and this command is executed and the
+STDOUT is assumed to be the password required for authentication.
+
+=back
 
 =head1 SUBCOMMANDS
 

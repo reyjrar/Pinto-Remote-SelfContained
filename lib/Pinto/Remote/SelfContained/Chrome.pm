@@ -1,16 +1,18 @@
 package
     Pinto::Remote::SelfContained::Chrome; # hide from PAUSE
+# ABSTRACT:  UI for self-contained remote operations
 
 use v5.10;
 use Moo;
 
 use Carp qw(croak);
 use IO::Handle; # ensure methods are available
+use IO::Interactive qw(is_interactive);
 use Types::Standard qw(Bool FileHandle Int);
 
 use namespace::clean;
 
-our $VERSION = '1.000';
+# VERSION
 
 has verbose => (is => 'ro', isa => Int, default => 0);
 has quiet => (is => 'ro', isa => Bool, default => 0);
@@ -21,7 +23,7 @@ sub palette { [qw(green yellow red)] }
 
 has stderr => (is => 'ro', isa => FileHandle, default => sub { \*STDERR });
 has stdout => (is => 'ro', isa => FileHandle, default => sub {
-    return \*STDOUT if !-t STDOUT;
+    return \*STDOUT unless is_interactive();
 
     my $pager = $ENV{PINTO_PAGER} // $ENV{PAGER}
         // return \*STDOUT;
@@ -101,40 +103,7 @@ sub should_render_progress {
 
     return $self->verbose > 0
         && ! $self->quiet
-        && -t $self->stdout;
+        && ! is_interactive();
 }
 
 1;
-
-__END__
-
-=pod
-
-=encoding UTF-8
-
-=head1 NAME
-
-Pinto::Remote::SelfContained::Chrome
-
-=head1 NAME
-
-Pinto::Remote::SelfContained::Chrome
-
-=head1 NAME
-
-Pinto::Remote::SelfContained::Chrome - UI for self-contained remote operations
-
-=head1 AUTHOR
-
-Aaron Crane E<lt>arc@cpan.orgE<gt>, Brad Lhotsky E<lt>brad@divisionbyzero.netE<gt>
-
-=head1 COPYRIGHT
-
-Copyright 2020 Aaron Crane.
-
-=head1 LICENSE
-
-This library is free software and may be distributed under the same terms
-as perl itself. See L<http://dev.perl.org/licenses/>.
-
-=cut

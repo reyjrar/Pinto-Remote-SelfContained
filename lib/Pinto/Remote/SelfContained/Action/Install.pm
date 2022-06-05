@@ -1,5 +1,6 @@
 package
     Pinto::Remote::SelfContained::Action::Install; # hide from PAUSE
+# ABSTRACT:  Install packages from the repository
 
 use v5.10;
 use Moo;
@@ -13,7 +14,7 @@ use constant PINTO_MINIMUM_CPANM_VERSION => '1.6920';
 
 use namespace::clean;
 
-our $VERSION = '1.000';
+# VERSION
 
 extends qw(Pinto::Remote::SelfContained::Action);
 
@@ -117,36 +118,3 @@ around execute => sub {
 };
 
 1;
-
-__END__
-
-=pod
-
-=encoding UTF-8
-
-=head1 NAME
-
-Pinto::Remote::SelfContained::Action::Install
-
-=head1 NAME
-
-Pinto::Remote::SelfContained::Action::Install
-
-=head1 NAME
-
-Pinto::Remote::SelfContained::Action::Install - Install packages from the repository
-
-=head1 AUTHOR
-
-Aaron Crane E<lt>arc@cpan.orgE<gt>, Brad Lhotsky E<lt>brad@divisionbyzero.netE<gt>
-
-=head1 COPYRIGHT
-
-Copyright 2020 Aaron Crane.
-
-=head1 LICENSE
-
-This library is free software and may be distributed under the same terms
-as perl itself. See L<http://dev.perl.org/licenses/>.
-
-=cut

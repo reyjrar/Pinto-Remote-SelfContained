@@ -1,0 +1,187 @@
+# NAME
+
+pintor - script for interacting with a remote Pinto server
+
+# VERSION
+
+version 1.999
+
+# SYNOPSIS
+
+    pintor help
+    pintor list --root http://example.com --stack dev
+
+# ENVIRONMENT VARIABLES
+
+This command recognizes and can use a number of environment variables as
+defaults for some of the command line arguments.
+
+- `PINTO_HOME`
+
+    This sets the default search path for command execution.
+
+- `PINTO_REPOSITORY_ROOT`
+
+    This sets the default for `--root` and is expected to be a URL.
+
+- `PINTO_AUTHOR_ID`
+
+    This sets the default for `--author` and is expected to be a string.
+
+- `PINTO_AUTHENTICATE`
+
+    This sets the default for `--authenticate` and is expected to be a boolean.
+
+- `PINTO_USERNAME`
+
+    This sets the default for `--username` and is expected to be a string.
+
+- `PINTO_PASSWORD`
+
+    If set, this is used as the password in `--authenticate` is specified.
+
+- `PINTO_PASSEXEC`
+
+    If set, implies authentication is enabled and this command is executed and the
+    STDOUT is assumed to be the password required for authentication.
+
+# SUBCOMMANDS
+
+- **pintor add** _archive_
+
+    Add local archives to the repository
+
+- **pintor clean**
+
+    Remove orphaned distribution archives
+
+- **pintor commands**
+
+    List the application's commands.
+
+- **pintor copy** _from-stack to-stack_
+
+    Create a new stack by copying another
+
+- **pintor default** (**--none** | _stack_)
+
+    Mark the default stack
+
+- **pintor delete** _target_...
+
+    Permanently remove an archive
+
+- **pintor diff** \[_left_\] _right_
+
+    Show difference between two stacks
+
+- **pintor help** \[_command_...\]
+
+    Display a command's help screen
+
+- **pintor install** _target_...
+
+    Install stuff from the repository
+
+- **pintor kill** _stack_
+
+    Permanently delete a stack
+
+- **pintor list** \[_stack_\]
+
+    Show the packages in a stack
+
+- **pintor lock** \[_stack_\]
+
+    Mark a stack as read-only
+
+- **pintor log** \[_stack_\]
+
+    Show the revision logs of a stack
+
+- **pintor look** _target_...
+
+    Unpack and explore distributions with your shell
+
+- **pintor new** _stack_
+
+    Create a new empty stack
+
+- **pintor nop**
+
+    Do nothing
+
+- **pintor pin** _target_...
+
+    Force a package to stay in a stack
+
+- **pintor props** \[_stack_\]
+
+    Show or set stack properties
+
+- **pintor pull** \[_target_\]...
+
+    Pull archives from upstream repositories
+
+- **pintor register** _target_...
+
+    Put existing packages on a stack
+
+- **pintor rename** _stack to-stack_
+
+    Change the name of a stack
+
+- **pintor reset** \[_stack_\] _revision_
+
+    Reset a stack to a prior revision
+
+- **pintor revert** \[_stack_\] _revision_
+
+    Revert stack to a prior revision
+
+- **pintor roots** \[_stack_\]
+
+    Show the roots of a stack
+
+- **pintor stacks**
+
+    Show available stacks
+
+- **pintor statistics** \[_stack_\]
+
+    Report statistics about the repository
+
+- **pintor unlock** \[_stack_\]
+
+    Mark a stack as writable
+
+- **pintor unpin** _target_...
+
+    Free packages that have been pinned
+
+- **pintor unregister** _target_...
+
+    Remove packages from a stack
+
+- **pintor update** _target_...
+
+    Update packages to latest versions
+
+- **pintor verify**
+
+    Report archives that are missing
+
+# AUTHOR
+
+Brad Lhotsky <brad@divisionbyzero.net>
+
+# CONTRIBUTOR
+
+Aaron Crane <arc@cpan.org>
+
+# COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2020 by Aaron Crane.
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.

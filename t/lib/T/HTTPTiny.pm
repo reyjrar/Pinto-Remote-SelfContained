@@ -5,7 +5,7 @@ use v5.10;
 use strict;
 use warnings;
 
-use parent 'Pinto::Remote::SelfContained::Httptiny';
+use parent 'HTTP::Tiny';
 
 use Class::Method::Modifiers qw(around fresh);
 use T::Handle;
