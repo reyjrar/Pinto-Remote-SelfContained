@@ -1,5 +1,6 @@
 package
     Pinto::Remote::SelfContained::Action; # hide from PAUSE
+# ABSTRACT: base class for remote Actions
 
 use v5.10;
 use Moo;
@@ -14,7 +15,7 @@ use URI;
 
 use namespace::clean;
 
-our $VERSION = '1.000';
+# VERSION
 
 with qw(
     Pinto::Remote::SelfContained::HasHttptiny
@@ -30,6 +31,13 @@ has username => (is => 'ro', isa => Username, required => 1);
 has password => (is => 'ro', isa => Maybe[Str], required => 1);
 
 has error => (is => 'rw');
+
+=method C<execute>
+
+Runs this Action on the remote server by serializing itself and
+sending a POST request to the server.
+
+=cut
 
 sub execute {
     my ($self, $streaming_callback) = @_;
@@ -151,41 +159,3 @@ sub _response_callback {
 }
 
 1;
-
-__END__
-
-=pod
-
-=encoding UTF-8
-
-=head1 NAME
-
-Pinto::Remote::SelfContained::Action
-
-=head1 NAME
-
-Pinto::Remote::SelfContained::Action
-
-=head1 NAME
-
-Pinto::Remote::SelfContained::Action - base class for remote Actions
-
-=head2 C<execute>
-
-Runs this Action on the remote server by serializing itself and
-sending a POST request to the server.
-
-=head1 AUTHOR
-
-Aaron Crane E<lt>arc@cpan.orgE<gt>, Brad Lhotsky E<lt>brad@divisionbyzero.netE<gt>
-
-=head1 COPYRIGHT
-
-Copyright 2020 Aaron Crane.
-
-=head1 LICENSE
-
-This library is free software and may be distributed under the same terms
-as perl itself. See L<http://dev.perl.org/licenses/>.
-
-=cut

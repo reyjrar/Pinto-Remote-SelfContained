@@ -1,5 +1,6 @@
 package
     Pinto::Remote::SelfContained::Request;
+# ABSTRACT:  request class for HTTP::Tiny
 
 use v5.10;
 use Moo;
@@ -13,7 +14,7 @@ use Types::Standard qw(ArrayRef Enum HashRef Maybe Str);
 
 use namespace::clean;
 
-our $VERSION = '1.000';
+# VERSION
 
 has username => (is => 'ro', isa => Username, required => 1);
 has password => (is => 'ro', isa => Maybe[Str], required => 1);
@@ -48,18 +49,20 @@ sub headers_hash {
     my ($self, $boundary) = @_;
     my $content_type = $self->content_type;
     $content_type .= "; boundary=$boundary" if defined $boundary;
+    my $authorization_header = $self->authorization_header;
     return {
         pairgrep { defined $b }
         %{ $self->headers },
         'Accept' => $self->accept,
         'Content-type' => $content_type,
-        'Authorization' => $self->authorization_header,
+        $authorization_header ? ( Authorization => $authorization_header ) : (),
     };
 }
 
 sub authorization_header {
     my ($self) = @_;
-    my $password = $self->password // return undef;
+    my $password = $self->password;
+    return unless length $password;
     my $authorization = join ':', $self->username, $password;
     my $enc = encode_base64($authorization, '');
     return "Basic $enc";
@@ -139,36 +142,3 @@ sub dump {
 }
 
 1;
-
-__END__
-
-=pod
-
-=encoding UTF-8
-
-=head1 NAME
-
-Pinto::Remote::SelfContained::Request
-
-=head1 NAME
-
-Pinto::Remote::SelfContained::Request
-
-=head1 NAME
-
-Pinto::Remote::SelfContained::Request - request class for HTTP::Tiny
-
-=head1 AUTHOR
-
-Aaron Crane E<lt>arc@cpan.orgE<gt>, Brad Lhotsky E<lt>brad@divisionbyzero.netE<gt>
-
-=head1 COPYRIGHT
-
-Copyright 2020 Aaron Crane.
-
-=head1 LICENSE
-
-This library is free software and may be distributed under the same terms
-as perl itself. See L<http://dev.perl.org/licenses/>.
-
-=cut

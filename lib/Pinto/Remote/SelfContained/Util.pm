@@ -1,21 +1,27 @@
 package
     Pinto::Remote::SelfContained::Util; # hide from PAUSE
+# ABSTRACT: various utility functions
 
 use v5.10;
 use strict;
 use warnings;
 
+use Capture::Tiny qw(capture);
 use Carp qw(croak);
 use Time::Moment;
+use IO::Interactive qw(is_interactive);
+use Term::ReadKey;
 
 use Exporter qw(import);
 
-our $VERSION = '1.000';
+# VERSION
 
 our @EXPORT_OK = qw(
     current_time_offset
     current_username
+    get_password
     mask_uri_passwords
+    password_exec
 );
 
 sub current_time_offset { Time::Moment->now->offset }
@@ -25,6 +31,27 @@ sub current_username {
         // croak("Can't determine username; try setting \$PINTO_USERNAME");
 }
 
+sub get_password {
+    # Environment Set
+    return $ENV{PINTO_PASSWORD} if $ENV{PINTO_PASSWORD};
+
+    # Try password exec
+    return password_exec($ENV{PINTO_PASSEXEC})
+        if $ENV{PINTO_PASSEXEC};
+
+    if( is_interactive() ) {
+        local $|=1;
+        printf "Pinto password: ";
+        ReadMode('noecho');
+        my $password = ReadLine();
+        ReadMode('normal');
+        chomp($password);
+        return $password;
+    }
+
+    return;
+}
+
 sub mask_uri_passwords {
     my ($uri) = @_;
 
@@ -32,37 +59,21 @@ sub mask_uri_passwords {
     return $uri;
 }
 
+sub password_exec {
+    my (@cmd) = @_;
+
+    my ($out,$err,$rc) = capture { system @cmd };
+
+    if( $rc == 0 ) {
+        chomp($out);
+        warn sprintf "password_exec(%s) returned empty password", join(' ', @cmd)
+            unless length $out;
+        return $out;
+    }
+
+    # Unsuccesful
+    die sprintf "password_exec(%s) returned non-zero exit code: rc=%d, stderr='%s'",
+        $rc, $err;
+}
+
 1;
-
-__END__
-
-=pod
-
-=encoding UTF-8
-
-=head1 NAME
-
-Pinto::Remote::SelfContained::Util
-
-=head1 NAME
-
-Pinto::Remote::SelfContained::Util
-
-=head1 NAME
-
-Pinto::Remote::SelfContained::Util - various utility functions
-
-=head1 AUTHOR
-
-Aaron Crane E<lt>arc@cpan.orgE<gt>, Brad Lhotsky E<lt>brad@divisionbyzero.netE<gt>
-
-=head1 COPYRIGHT
-
-Copyright 2020 Aaron Crane.
-
-=head1 LICENSE
-
-This library is free software and may be distributed under the same terms
-as perl itself. See L<http://dev.perl.org/licenses/>.
-
-=cut

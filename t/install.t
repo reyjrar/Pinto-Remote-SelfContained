@@ -132,7 +132,7 @@ subtest 'install with --reinstall and password', sub {
     my $chrome = T::Chrome->new(verbose => 3);
     my $httptiny = T::HTTPTiny->new([$response]);
     my $action = action(
-        { cpanm_options => { reinstall => '' } }, 
+        { cpanm_options => { reinstall => '' } },
         password => 's3kr1t',
         httptiny => $httptiny,
         chrome => $chrome,

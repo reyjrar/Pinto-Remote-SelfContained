@@ -1,3 +1,5 @@
+Pinto-Remote-SelfContained-*
 .perl-version
+.build/
 local/
 cover_db/

@@ -1,26 +1,69 @@
 package
     Pinto::Remote::SelfContained::App; # hide from PAUSE
+# ABSTRACT: app class for running Pinto commands
+
+=head1 SYNOPSIS
+
+    use Pinto::Remote::SelfContained::App;
+
+    Pinto::Remote::SelfContained::App->new_from_argv(\@ARGV, %attrs)->run;
+
+=cut
 
 use v5.10;
 use Moo;
 
 use Getopt::Long::Descriptive qw(describe_options);
+use IO::Interactive qw(is_interactive);
 use List::Util qw(max pairgrep);
 use Path::Tiny qw(path);
 use Pinto::Remote::SelfContained;
 use Pinto::Remote::SelfContained::Chrome;
 use Pinto::Remote::SelfContained::Types qw(Uri);
-use Pinto::Remote::SelfContained::Util qw(current_username);
+use Pinto::Remote::SelfContained::Util qw(current_username get_password);
 use Types::Standard qw(ArrayRef Bool HashRef Int Maybe Str);
 
 use namespace::clean;
 
-our $VERSION = '1.000';
+# VERSION
 
-has root => (is => 'ro', isa => Uri, coerce => 1, required => 1);
+has root => (
+    is      => 'ro',
+    isa     => Uri,
+    coerce  => 1,
+    default => sub {
+        $ENV{PINTO_REPOSITORY_ROOT} || die "root is required, either via --root or by setting PINTO_REPOSITORY_ROOT='...'"
+    }
+);
 
-has username => (is => 'ro', isa => Str, default => sub { current_username() });
-has password => (is => 'ro', isa => Maybe[Str]);
+has authenticate => (
+    is      => 'ro',
+    isa     => Bool,
+    default => sub { $ENV{PINTO_AUTHENTICATE} // !!length($ENV{PINTO_PASSEXEC}) },
+);
+
+has username => (
+    is      => 'ro',
+    isa     => Str,
+    default => sub { current_username() },
+);
+
+has passexec => (
+    is      => 'lazy',
+    isa     => Maybe[Str],
+    default => sub { $ENV{PINTO_PASSEXEC} },
+);
+
+has password => (
+    is  => 'lazy',
+    isa => Maybe[Str],
+);
+sub _build_password {
+    my $self = shift;
+    return $self->authenticate ? (
+        $self->passexec ? password_exec($self->passexec) : get_password()
+    ) : ();
+}
 
 has quiet => (is => 'ro', isa => Bool);
 has verbose => (is => 'ro', isa => Int, default => 1);
@@ -28,7 +71,7 @@ has verbose => (is => 'ro', isa => Int, default => 1);
 has action_name => (is => 'ro', isa => Str, required => 1);
 has args => (is => 'ro', isa => HashRef, default => sub { +{} });
 
-my @ATTRS_FROM_OPTIONS = qw(root username password quiet verbose);
+my @ATTRS_FROM_OPTIONS = qw(root username passexec authenticate quiet verbose);
 
 sub command_info {
     # The "args" is a string listing argument names, each optionally suffixed
@@ -412,14 +455,15 @@ sub command_alias {
 
 sub global_opt_spec {
     return (
-        [ 'root|r=s'           => 'Path to your repository root directory (required)' ],
-        [ 'color|colour!'      => '(Currently ignored)' ],
-        [ 'password|p=s'       => 'Password for server authentication' ],
-        [ 'quiet|q'            => 'Only report fatal errors' ],
-        [ 'username|u=s'       => 'Username for server authentication' ],
-        [ 'verbose|v+'         => 'More diagnostic output (repeatable)' ],
+        [ 'root|r=s'            => 'Path to your repository root directory (required)' ],
+        [ 'color|colour!'       => '(Currently ignored)' ],
+        [ 'authenticate|auth'   => 'Enable authentication'],
+        [ 'passexec|p=s'        => 'Command to use get retrieve the password, implies authenticate', { implies => [qw(authenticate)] } ],
+        [ 'username|u=s'        => 'Username for server authentication' ],
+        [ 'quiet|q'             => 'Only report fatal errors' ],
+        [ 'verbose|v+'          => 'More diagnostic output (repeatable)' ],
         [],
-        [ 'help|?'             => 'Print usage message and exit', { shortcircuit => 1 }],
+        [ 'help|?'              => 'Print usage message and exit', { shortcircuit => 1 }],
     );
 }
 
@@ -479,8 +523,10 @@ sub parse_from_argv {
         exit $exit_status;
     }
     elsif (my @missing = grep !defined $opt->{$_}, qw(root)) {
-        my $missing = join ', ', map "--$_", @missing;
-        $usage->die({ pre_text => "Required options not found: $missing\n\n" });
+        foreach my $missing (@missing) {
+            next if $missing eq 'root' and $ENV{PINTO_REPOSITORY_ROOT};
+            $usage->die({ pre_text => "Required options not found: --$missing\n\n" });
+        }
     }
 
     my %parsed = $class->parse_arguments($info, $opt, $usage, @ARGV);
@@ -605,29 +651,3 @@ sub make_chrome_instance {
 }
 
 1;
-
-__END__
-
-=pod
-
-=encoding UTF-8
-
-=head1 NAME
-
-Pinto::Remote::SelfContained::App
-
-=head1 SYNOPSIS
-
-    use Pinto::Remote::SelfContained::App;
-
-    Pinto::Remote::SelfContained::App->new_from_argv(\@ARGV, %attrs)->run;
-
-=head1 NAME
-
-Pinto::Remote::SelfContained::App
-
-=head1 NAME
-
-Pinto::Remote::SelfContained::App - app class for running Pinto commands
-
-=cut

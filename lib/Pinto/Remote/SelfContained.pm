@@ -1,4 +1,18 @@
 package Pinto::Remote::SelfContained;
+# ABSTRACT:  interact with a remote Pinto repository
+
+=head1 DESCRIPTION
+
+Pinto::Remote::SelfContained is a partial clone of L<Pinto::Remote>, but
+without the server parts, and therefore a much smaller dependency graph.
+Documentation can be found in that module.
+
+This class exists for situations where your organisation is using Pinto, and
+doesn't currently have the bandwidth to move away from it to any alternative,
+but wants something smaller than the whole of L<Pinto> for interacting with the
+remote repo.
+
+=cut
 
 use v5.10;
 use Moo;
@@ -8,37 +22,53 @@ use Module::Runtime qw(module_notional_filename use_package_optimistically);
 use Pinto::Remote::SelfContained::Action;
 use Pinto::Remote::SelfContained::Chrome;
 use Pinto::Remote::SelfContained::Types qw(Uri);
-use Pinto::Remote::SelfContained::Util qw(current_username);
+use Pinto::Remote::SelfContained::Util qw(current_username password_exec);
 use Types::Standard qw(Bool InstanceOf Int Maybe Str);
 
 use namespace::clean;
 
-our $VERSION = '1.001';
+# VERSION
 
 with qw(
     Pinto::Remote::SelfContained::HasHttptiny
 );
 
 has root => (
-    is => 'ro',
-    isa => Uri,
+    is      => 'ro',
+    isa     => Uri,
     default => sub { $ENV{PINTO_REPOSITORY_ROOT} },
-    coerce => 1,
+    coerce  => 1,
 );
 
 has username => (
-    is => 'ro',
-    isa => Str,
+    is      => 'ro',
+    isa     => Str,
     default => sub { current_username() },
 );
 
-has password => (is => 'ro', isa => Maybe[Str]);
+has password => (
+    is      => 'ro',
+    isa     => Maybe[Str],
+    default => sub {
+        return $ENV{PINTO_PASSWORD} if $ENV{PINTO_PASSWORD};
+        return password_exec($ENV{PINTO_PASSEXEC}) if $ENV{PINTO_PASSEXEC};
+    },
+);
 
 has chrome => (
-    is => 'lazy',
-    isa => InstanceOf['Pinto::Remote::SelfContained::Chrome'],
+    is      => 'lazy',
+    isa     => InstanceOf['Pinto::Remote::SelfContained::Chrome'],
     builder => sub { Pinto::Remote::SelfContained::Chrome->new },
 );
+
+=method C<< run($action_name => %action_args) >>
+
+Loads the Action subclass for the given C<$action_name> and constructs
+an object using the given C<$action_args>.  If the subclass
+C<Pinto::Remote::SelfContained::Action::$action_name> does not exist, then it falls
+back to the L<Pinto::Remote::SelfContained::Action> base class.
+
+=cut
 
 sub run {
     my ($self, $action_name, @args) = @_;
@@ -58,12 +88,12 @@ sub make_action {
     local $SIG{__WARN__} = sub { $self->chrome->warning($_) for @_ };
 
     my $action = $action_class->new(
-        name => $action_name,
-        args => $action_args,
-        root => $self->root,
+        name     => $action_name,
+        args     => $action_args,
+        root     => $self->root,
         username => $self->username,
         password => $self->password,
-        chrome => $self->chrome,
+        chrome   => $self->chrome,
         httptiny => $self->httptiny,
     );
 }
@@ -88,64 +118,3 @@ sub load_class_for_action {
 }
 
 1;
-
-__END__
-
-=pod
-
-=encoding UTF-8
-
-=head1 NAME
-
-Pinto::Remote::SelfContained
-
-=head1 VERSION
-
-version 1.001
-
-=head1 DESCRIPTION
-
-Pinto::Remote::SelfContained is a partial clone of L<Pinto::Remote>, but
-without the server parts, and therefore a much smaller dependency graph.
-Documentation can be found in that module.
-
-This class exists for situations where your organisation is using Pinto, and
-doesn't currently have the bandwidth to move away from it to any alternative,
-but wants something smaller than the whole of L<Pinto> for interacting with the
-remote repo.
-
-=head1 NAME
-
-Pinto::Remote::SelfContained
-
-=head1 VERSION
-
-version 1.001
-
-=head1 NAME
-
-Pinto::Remote::SelfContained - interact with a remote Pinto repository
-
-=head1 METHODS
-
-=head2 C<< run($action_name => %action_args) >>
-
-Loads the Action subclass for the given C<$action_name> and constructs
-an object using the given C<$action_args>.  If the subclass
-C<Pinto::Remote::SelfContained::Action::$action_name> does not exist, then it falls
-back to the L<Pinto::Remote::SelfContained::Action> base class.
-
-=head1 AUTHOR
-
-Aaron Crane E<lt>arc@cpan.orgE<gt>, Brad Lhotsky E<lt>brad@divisionbyzero.netE<gt>
-
-=head1 COPYRIGHT
-
-Copyright 2020 Aaron Crane.
-
-=head1 LICENSE
-
-This library is free software and may be distributed under the same terms
-as perl itself. See L<http://dev.perl.org/licenses/>.
-
-=cut
