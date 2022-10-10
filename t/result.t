@@ -4,6 +4,9 @@ use v5.10;
 use strict;
 use warnings;
 
+# Reset Environment
+BEGIN { delete $ENV{$_} for grep { /^PINTO_/ } keys %ENV }
+
 use Test::More;
 use Test::Warnings qw(had_no_warnings :no_end_test);
 

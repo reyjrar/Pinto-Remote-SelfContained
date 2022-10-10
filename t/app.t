@@ -4,6 +4,9 @@ use v5.10;
 use strict;
 use warnings;
 
+# Reset Environment
+BEGIN { delete $ENV{$_} for grep { /^PINTO_/ } keys %ENV }
+
 use Test::Deep qw(all cmp_deeply re);
 use Test::More;
 use Test::Warnings qw(had_no_warnings :no_end_test);
@@ -13,6 +16,7 @@ use lib path(__FILE__)->sibling('lib')->stringify;
 
 use T::Exit;
 BEGIN { *CORE::GLOBAL::exit = sub { T::Exit->throw($_[0] // 0) } }
+
 
 use Capture::Tiny qw(capture);
 use Pinto::Remote::SelfContained::App;
@@ -32,6 +36,7 @@ sub parse_ok {
     my ($argv, $expected, $desc) = @_;
     my @got = parse(@$argv);
     local $Test::Builder::Level = $Test::Builder::Level + 1;
+    note(explain($expected));
     cmp_deeply(\@got, $expected, $desc) or diag(explain(\@got));
 }
 

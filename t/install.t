@@ -4,6 +4,9 @@ use v5.10;
 use strict;
 use warnings;
 
+# Reset Environment
+BEGIN { delete $ENV{$_} for grep { /^PINTO_/ } keys %ENV }
+
 use Capture::Tiny qw(capture_stderr capture_stdout);
 use Test::Deep qw(cmp_deeply re);
 use Test::Fatal qw(exception);
